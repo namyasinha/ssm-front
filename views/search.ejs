@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Add Skills</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    
+    
+    <link href="css/bootstrap.css" rel="stylesheet"/>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet"/>
+
+
+  </head>
+  
+    <style>
+    body, html {
+      height: 100%;
+      width:100%;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      background: #eee;
+      font-size:13px;
+  
+  
+}
+    .nav a{
+      font-size: 20px;
+    }
+    .container-fluid{
+      margin-top: 70px;
+    }
+    
+.card {
+    
+    
+    width:400px;
+    min-height:300px;
+    background:#fff;
+    box-shadow:0 20px 50px rgba(0,0,0,.1);
+    border-radius:5px;
+    transition:0.5s;
+    
+}
+
+.card .box {
+    position:absolute;
+    top:50%;
+    left:0;
+    transform:translateY(-50%);
+    text-align:center;
+    padding:10px;
+    box-sizing:border-box;
+    width:100%;
+    
+
+}
+.card-right{
+    
+    
+    
+    background:#fff;
+    box-shadow:0 20px 50px rgba(0,0,0,.1);
+    border-radius:5px;
+    transition:0.5s;
+}
+.nav-item{
+  font-size: 15px;
+  padding-right: 5px;
+}
+.navbar-brand{
+  font-size: 20px;
+}
+</style>
+<body>
+   
+    
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Skill Set Matrix</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/skills">My Skills
+                  
+                </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add">Add Skills</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/search">Search</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/profile">My Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<div class="container-fluid">
+<div class="row">
+
+
+
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+<div class="card">
+    <div class="box">
+    <h1 style="text-align:left;font-size:20px;">Filter results</h1><hr>
+        <!--search by skills-->
+        <form action="/search"method="post">
+	
+            <div class="form-group">
+              
+              <select class="form-control form-control-lg" id="exampleFormControlSelect1"name="skill">
+                <option selected>Search by skill</option>
+                  <% skills.forEach((skills)=>{ %>
+                        <option value="<%= skills.skill%>"><%=skills.skill%></option>
+
+                  <% }); %>
+                </option>
+              </select> 
+              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button> 
+            </div>
+            
+
+        </form>
+        <br>
+        <!--search by names-->
+        <form action="/search_name"method="post">
+	          <div class="form-group">
+              
+              <select class="form-control form-control-lg" id="exampleFormControlSelect1"name="name">
+                <option selected>Search by name</option>
+                  <% names.forEach((names)=>{ %>
+                      <option value="<%=names.name%>"><%=names.name%></option>
+
+                  <% }); %>   
+                </option>
+              </select>  
+            </div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+
+        </form>
+        
+    </div>
+    </div>
+  </div>
+  <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+    <div class="card-right">
+      
+    
+    
+    </div>
+  
+  
+  </div>
+  </div>
+
+</div>
+
+
+</body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</html>
+
