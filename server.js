@@ -8,9 +8,19 @@ var app=express();
 var ejs=require("ejs");
 var fileUpload=require("express-fileupload");
 var path=require("path");
+var auth=require("./middleware/auth")
+var config= require("config")
+var login=require("./routes/login")
+var cookieParser = require('cookie-parser');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser({
+	cookie: {
+		httpOnly: true,
+		secure: true
+	  }
+}))
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,19 +28,10 @@ app.use(function(req, res, next) {
   next();
 });
 app.set('view engine','ejs');
-app.use(session({secret:"wesdfgtrftt564324", saveUninitialized:true, resave:true}))
+
 app.use(express.static('public'))
 app.use(fileUpload())
-//session
 
-var auth=function(req,res,next){
-	if(req.session.loggedIn){
-		next();
-	}
-	else{
-		res.redirect("/")
-	}
-}
 
 
 
@@ -39,7 +40,7 @@ var register=require("./routes/register")
 app.route('/register').post(register)
 
 //login
-var login=require("./routes/login")
+
 app.route('/login').post(login)
 app.get("/login",(req,res)=>{
 	res.sendFile(__dirname+"/login.html")
@@ -59,13 +60,13 @@ app.get("/add",auth,(req,res)=>{
 //my profile
 
 app.get('/profile',auth,(req,res)=>{
-	var email=req.session.email;
+	var email=req.cookies.user.email;
 	var sql="select * from users where email='"+email+"'";
 	db.query(sql,(error,results)=>{
 		res.render('profile',{
 			user:results
 		})
-		console.log(results)
+		//console.log(results)
 
 	})
 	
@@ -74,7 +75,7 @@ app.get('/profile',auth,(req,res)=>{
 
 //update_skills
 app.get("/update/:id",auth,(req,res)=>{
-	db.query("select * from skills where skill='"+req.params.id+"' and email='"+req.session.email+"'",(error,results)=>{
+	db.query("select * from skills where skill='"+req.params.id+"' and email='"+req.cookies.user.email+"'",(error,results)=>{
 		res.render('update',{
 			update:results
 		})
@@ -87,14 +88,14 @@ app.route("/update").post(update)
 //delete
 
 app.get('/delete/:id',auth,(req,res)=>{
-	db.query("delete from skills where email='"+req.session.email+"' and skill='"+req.params.id+"'",(error,results)=>{
+	db.query("delete from skills where email='"+req.cookies.user.email+"' and skill='"+req.params.id+"'",(error,results)=>{
 		res.redirect('/skills')
 	})
 })
 
 //show my skills
 app.get('/skills',auth,(req,res)=>{
-	var email=req.session.email;
+	var email=req.cookies.user.email
 	var sql="select * from skills where email='"+email+"'"
 	db.query(sql,(error,results)=>{
 		res.render('skills',{
@@ -131,7 +132,7 @@ app.route('/search_name').post(search_name)
 var update_profile=require("./routes/update_profile")
 app.route("/update_profile").post(update_profile)
 app.get("/update_profile",auth,(req,res)=>{
-	var sql="select * from users where email='"+req.session.email+"'";
+	var sql="select * from users where email='"+req.cookies.user.email+"'";
 	db.query(sql,(error,results)=>{
 		res.render('update_profile',{
 			user:results
@@ -142,7 +143,8 @@ app.get("/update_profile",auth,(req,res)=>{
 
 //logout
 app.get("/logout",(req,res)=>{
-	req.session.loggedIn=false;
+	res.clearCookie('user')
+	
 	res.redirect("/")
 })
 

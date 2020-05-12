@@ -1,9 +1,22 @@
 var db=require("./database");
 var bcrypt=require("bcrypt");
+var auth=require("../middleware/auth")
+const config = require('config');
+const jwt = require('jsonwebtoken');
 
 module.exports=(req,res)=>{
+	//generating access token
+	
 	var email=req.body.email;
 	var password=req.body.password;
+	var generateAuthToken=function(){
+		let token = jwt.sign({email:email,password:password},
+			config.myprivatekey,
+			{ expiresIn: '24h' // expires in 24 hours
+			}
+		  );
+		  return token;
+	}
 
 	var sql="select * from users where email='"+email+"'";
 	db.query(sql,(error,results)=>{
@@ -14,10 +27,19 @@ module.exports=(req,res)=>{
 			bcrypt.compare(password,hash).then(function(response){
 				if(response==true)
 					{//console.log("logged in");
-				      req.session.loggedIn=true;
-				      req.session.email=email;
 				      
-				    res.redirect("/skills")}
+					  var token=generateAuthToken();
+						//console.log(token)
+						var user={
+						
+						email:email,
+						access_token:token
+						}
+						res.cookie("user",user);
+						res.header("x-auth-token", token)
+				      
+					res.redirect("/skills")
+				}
 				else
 					{console.log("wrong credentials");
 						res.render('login',{

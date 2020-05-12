@@ -3,7 +3,7 @@ var mv=require("mv")
 var fs=require("fs")
 module.exports=(req,res)=>{
     var name=req.body.name;
-    var email=req.session.email;
+    var email=req.cookies.user.email;
     var contact=req.body.contact;
     var file = req.files.upload;
     if(file){

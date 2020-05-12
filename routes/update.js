@@ -1,7 +1,7 @@
 var db=require("./database")
 
 module.exports=(req,res)=>{
-	var email=req.session.email;
+	var email=req.cookies.user.email;
 	
 	var skill=req.body.skill;
 	var level=req.body.level;
