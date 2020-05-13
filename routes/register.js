@@ -20,7 +20,7 @@ var bcrypt=require("bcrypt")
  		}
  		else{
 			 			bcrypt.hash(password,10,(err,hash)=>{
-					var sql="insert into users values('"+name+"','"+email+"','"+contact+"','"+hash+"')";
+					var sql="insert into users values('"+name+"','"+email+"','"+contact+"','"+hash+"',null)";
 				db.query(sql,(error,results)=>{
 					if(error)
 						console.log(error);
